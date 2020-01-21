@@ -44,11 +44,14 @@
         </div>
       </nav>
       <!-- End Navbar -->
-      <div class="content">
+      <div class="content" id="app">
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-12">
               <a href="<?php echo base_url ('c_main/profile')?>" class="btn btn-success pull-left"><span class="fa fa-arrow-circle-left"></span> <b>Kembali</b> </a>
+              <a href="#" class="mt-2 ml-2 pt-5">
+                Running Time : {{ this.runtime }}
+              </a>
               <br>
               <br>
               <div class="card">
@@ -58,7 +61,7 @@
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table" id="app">
+                    <table class="table" >
                       <thead class=" text-success">
                         <th>
                           <b>Peringkat</b>
@@ -130,18 +133,29 @@
       weight: [0.38, 0.31, 0.31],
       mahasiswa: <?php echo json_encode($mahasiswa); ?>,
       vector: [],
-      hasil: []
+      hasil: [], 
+      runtime: 0
     },
     methods: {
       dwp: function() {
+        var t0 = performance.now();
+
+        var count;
         for (var i = 0; i < this.mahasiswa.length; i++) {
-          this.vector[i] = [this.mahasiswa[i].id, Math.pow(this.mahasiswa[i].pot, this.weight[0]) * Math.pow(this.mahasiswa[i].ukt, this.weight[1]) * Math.pow(this.mahasiswa[i].jt, this.weight[2])]
+          count = Math.pow(this.mahasiswa[i].pot, this.weight[0]) * Math.pow(this.mahasiswa[i].ukt, this.weight[1]) * Math.pow(this.mahasiswa[i].jt, this.weight[2])
+          this.vector[i] = [this.mahasiswa[i].id, count]
+        }
+
+        var sum = this.vector.reduce((r, a) => a.map((b, i) => (r[i] || 0) + b), []);
+
+        for (var i = 0; i < this.mahasiswa.length; i++) {
+          this.vector[i] = [this.mahasiswa[i].id, this.vector[i][1]/sum[1]];
         }
 
         this.vector = this.vector.sort(this.Comparator);
 
         var mapPot = {
-          1: "7.500.000-10.000.000", 
+          1: "7.500.000-10.000.000",
           2: "5.000.000-7.500.000",
           3: "2.500.000-5.000.000",
           4: "1.000.000-2.500.000",
@@ -157,6 +171,9 @@
           this.hasil[i].pot = mapPot[this.hasil[i].pot]
         }
 
+        var t1 = performance.now();
+        this.runtime = (t1 - t0)
+        console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
         console.log(this.vector)
         console.log(this.hasil)
       },
@@ -181,7 +198,7 @@
         return null;
       }
     },
-
+   
     beforeMount(){
       this.dwp()
     }

@@ -49,6 +49,9 @@
           <div class="row">
             <div class="col-md-12">
               <a href="<?php echo base_url ('c_main/table')?>" class="btn btn-success pull-left"><span class="fa fa-arrow-circle-left"></span> <b>Kembali</b> </a>
+              <a href="#" class="mt-2 ml-2 pt-5">
+                Running Time : <?php echo number_format($runningtime,4,",",".")." seconds"; ?>
+              </a>
               <br>
               <br>
               <div class="card">

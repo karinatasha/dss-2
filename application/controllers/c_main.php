@@ -58,6 +58,7 @@ class c_main extends CI_Controller {
 
 		// Pencarian bobot maksimum per kriteria
 		$alternative =  $this->db->get('mahasiswa')->result();
+		$start = microtime(true);
 		$c1 = [];
 		foreach ($alternative as $alt) {
 			$c1[] = $alt->pot;
@@ -115,9 +116,11 @@ class c_main extends CI_Controller {
 
 			];
 		}
+		$time_elapsed_secs = microtime(true) - $start;
 
 		$data = array(
-			'hasil' => $hasil
+			'hasil' => $hasil,
+			'runningtime' => $time_elapsed_secs
 		);
 
 		$this->load->view('elements/head');
