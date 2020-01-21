@@ -50,7 +50,7 @@
             <div class="col-md-12">
               <a href="<?php echo base_url ('c_main/profile')?>" class="btn btn-success pull-left"><span class="fa fa-arrow-circle-left"></span> <b>Kembali</b> </a>
               <a href="#" class="mt-2 ml-2 pt-5">
-                Running Time : {{ this.runtime }}
+                Running Time : {{ this.runtime }} seconds
               </a>
               <br>
               <br>
@@ -138,7 +138,7 @@
     },
     methods: {
       dwp: function() {
-        var t0 = performance.now();
+        startTime = new Date();
 
         var count;
         for (var i = 0; i < this.mahasiswa.length; i++) {
@@ -171,9 +171,8 @@
           this.hasil[i].pot = mapPot[this.hasil[i].pot]
         }
 
-        var t1 = performance.now();
-        this.runtime = (t1 - t0)
-        console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
+        endTime = new Date();
+        this.runtime = (endTime - startTime)/1000;
         console.log(this.vector)
         console.log(this.hasil)
       },
